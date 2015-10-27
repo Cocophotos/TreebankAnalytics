@@ -1,0 +1,10 @@
+*.swp
+*.pyc
+*.o
+._*
+*.bak
+.DS_Store
+build
+__pycache__
+*.norm
+*.egg-info*
