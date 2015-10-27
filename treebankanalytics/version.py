@@ -33,6 +33,7 @@
 __all__ = ("get_git_version")
 
 from subprocess import Popen, PIPE
+import os
 
 
 def call_git_describe(abbrev=4):
