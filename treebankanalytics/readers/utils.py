@@ -9,10 +9,11 @@ def add_root_node(graph):
 
 def normalize_features(features):
     if isinstance(features, str):
-        if features == '_':
+        if features == '_' or features == '':
             return {}
         else:
-            return dict([item.split('=') for item in features.split('|') if item != "_"])
+            d = [item.split('=') for item in features.split('|') if item != "_"]
+            return dict(d)
     else:
         return '|'.join(["{0}={1}".format(k, features[k]) for k in features])
 
