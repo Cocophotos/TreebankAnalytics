@@ -13,12 +13,15 @@ def sequoia_writer(graph, fileo):
             id, token, lemma, cpos, pos, features = utils.get_node(n)
 
             #Get every heads of n
-            heads = graph.sources_of(n).values()
-            einfo = []
-            for e in heads:
-                #Get head integer, label and dep integer (should be the same as n)
-                head, label, _ = utils.get_edge(e)
-                einfo.append( (head, label) )
+            try
+                heads = graph.sources_of(n).values()
+                einfo = []
+                for e in heads:
+                    #Get head integer, label and dep integer (should be the same as n)
+                    head, label, _ = utils.get_edge(e)
+                    einfo.append( (head, label) )
+            except AttributeError:
+                einfo = []
 
             #Format heads and labels following deepsequoia format
             if len(einfo) > 0:

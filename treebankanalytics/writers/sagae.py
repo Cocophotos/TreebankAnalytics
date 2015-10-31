@@ -12,13 +12,16 @@ def sagae_writer(graph, fileo):
         id, token, lemma, cpos, pos, features = utils.get_node(n)
 
         #Get every heads of n
-        heads = graph.sources_of(n).values()
-        done = False
-        for e in heads:
-            #Get head integer, label and dep integer (should be the same as n)
-            head, label, _ = utils.get_edge(e)
-            print("%i\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (id, token, lemma, cpos, pos, features, head, label), file=fileo)
-            done = True
+        try:
+            heads = graph.sources_of(n).values()
+            done = False
+            for e in heads:
+                #Get head integer, label and dep integer (should be the same as n)
+                head, label, _ = utils.get_edge(e)
+                print("%i\t%s\t%s\t%s\t%s\t%s\t%s\t%s" % (id, token, lemma, cpos, pos, features, head, label), file=fileo)
+                done = True
+        except AttributeError:
+            done = False
 
         if not done:
             print("%i\t%s\t%s\t%s\t%s\t%s" % (id, token, lemma, cpos, pos, features), file=fileo)
