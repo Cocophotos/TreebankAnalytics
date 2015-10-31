@@ -13,7 +13,7 @@ def sequoia_writer(graph, fileo):
             id, token, lemma, cpos, pos, features = utils.get_node(n)
 
             #Get every heads of n
-            try
+            try:
                 heads = graph.sources_of(n).values()
                 einfo = []
                 for e in heads:
