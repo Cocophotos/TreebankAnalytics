@@ -33,6 +33,8 @@ def sagae_reader(fileo):
             items = re.split('\t', line)
             node = utils.create_node(*items[:6])
             utils.add_id_to_features(kept_id, node)
+            if len(items) > 8:
+                utils.handle_extra_columns(node, items[8:])
             graph.add_node(node)
 
             if len(items) > 6:
