@@ -1,7 +1,7 @@
 import os, re, sys
 import treebankanalytics.graphs.Graph as G
 
-__all__ = ['add_root_node', 'is_comment', 'create_node', 'create_edge', 'add_id_to_features', 'normalize_features']
+__all__ = ['add_root_node', 'is_comment', 'create_node', 'create_edge', 'add_id_to_features', 'normalize_features', 'handle_extra_columns']
 
 def add_root_node(graph):
     top_node = G.Node(0, {'token':'_top_', 'lemma':'_top_', 'cpos':'_', 'pos':'_', 'features':'_'})
@@ -16,6 +16,9 @@ def normalize_features(features):
             return dict(d)
     else:
         return '|'.join(["{0}={1}".format(k, features[k]) for k in features])
+
+def handle_extra_columns(node, columns):
+    node['ta_extra_columns'] = columns
 
 def is_comment(line):
     return line.startswith('#')
