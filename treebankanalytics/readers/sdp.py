@@ -34,7 +34,7 @@ def sdp_reader(fileo):
                             graph.add_edge(edge)
 
                 yield graph
-                graph = G.graph()
+                graph = G.Graph()
                 predicates = []
                 edges      = {}
                 continue
@@ -47,7 +47,7 @@ def sdp_reader(fileo):
             tid, token, lemma, pos, top, pred = items[:6]
             tid = int(tid)
 
-            node = utils.create_node_sdp(tid, token, lemma, pos, pos, '_')
+            node = utils.create_node(tid, token, lemma, pos, pos, '_')
             edges[tid] = items[6:]
 
             top = True if top == '+' else False
@@ -55,8 +55,7 @@ def sdp_reader(fileo):
             if pred:
                 predicates.append(tid)
             if top:
-                edge = Edge(0, int(tid), {'label':'root'})
-                graph.add_edge(edge)
+                utils.add_root_node(graph)
 
             if node.index() == 1 and kept_id is None:
                 kept_id = "2%i" % numsent
