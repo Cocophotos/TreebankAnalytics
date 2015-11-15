@@ -8,3 +8,4 @@ build
 __pycache__
 *.norm
 *.egg-info*
+docs/build

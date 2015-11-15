@@ -2,7 +2,7 @@ import os, re, sys, abc, numbers
 from treebankanalytics.graphs.Graph import Graph
 
 __all__ = ['MergeNotDefinedError', 'Analyzer', 'PropertyAnalyzer', 'VoidAnalyzer',
-'CrossingEdgesAnalyzer', 'NonPlanarAnalyzer', 'CyclesAnalyzer', 'LabelsAnalyzer']
+'CrossingEdgesAnalyzer', 'NonPlanarAnalyzer', 'CyclesAnalyzer', 'LabelsAnalyzer', 'EdgeLengthBinsAnalyzer']
 
 class MergeNotDefinedError(Exception):
     pass
@@ -60,6 +60,66 @@ class LabelsAnalyzer(PropertyAnalyzer):
         cumul = 0.0
         for label, percent in sorted_percents:
             table.append([label, str(r['Labels'][label]), str(percent), str(cumul + percent)])
+            cumul += percent
+        return formatter.format(table)
+
+class EdgeLengthBinsAnalyzer(PropertyAnalyzer):
+    def __init__(self, graph, config):
+        super().__init__(graph, config)
+        self._lengths = {}
+        self._bin_start = 1
+        self._bin_end   = 100
+        self._bin_step  = 10
+        self._parse_config()
+
+    @classmethod
+    def name(cls):
+        return "EdgeLengthBinsAnalyzer"
+
+    def _parse_config(self):
+        if not EdgeLengthBinsAnalyzer.name() in self._config:
+            return
+        scorer = self._config[EdgeLengthBinsAnalyzer.name()]
+        self._bin_start = scorer['binStart'] if 'binStart' in scorer else 1
+        self._bin_end   = scorer['binStop'] if 'binStop' in scorer else 100
+        self._bin_step  = scorer['binStep'] if 'binStep' in scorer else 10
+
+    def _determine_bins(self, e):
+        size = abs( e.source() - e.target() )
+        for low,high in zip( range(self._bin_start, self._bin_end+1, self._bin_step), range(self._bin_step, self._bin_end+1, self._bin_step) ):
+            if size >= low and size <= high:
+                return "{0}-{1}".format(low, high)
+        return "{0}+".format(self._bin_end)
+
+    def analyze(self):
+        for e in self._graph.edges():
+            _bin = self._determine_bins(e)
+            self._lengths[_bin] = self._lengths.setdefault(_bin, 0) + 1
+
+    def get_results(self):
+        return {'Edges': len(self._graph), 'Lengths': self._lengths}
+
+    @classmethod
+    def table(cls, results, formatter):
+        def sorting(k):
+            info = k[0].split('-')
+            if len(info) == 1:
+                t = info[0][:-1]
+                return (int(t), int(t))
+            else:
+                return (int(info[0]), int(info[1]))
+
+        r = {'Percents': {}, 'Lengths': {}}
+        for dist in results['Lengths']:
+            r['Percents'][dist] = results['Lengths'][dist] / results['Edges'] * 100.0
+            r['Lengths'][dist]   = results['Lengths'][dist]
+
+        sorted_percents = sorted(r['Percents'].items(), key=sorting)
+
+        table = [['Lengths', '#', '%']]
+        cumul = 0.0
+        for dist, percent in sorted_percents:
+            table.append([dist, str(r['Lengths'][dist]), str(percent)])
             cumul += percent
         return formatter.format(table)
 

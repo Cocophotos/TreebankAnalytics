@@ -1,14 +1,13 @@
 import yaml, argparse, functools
 
 from treebankanalytics.actions import Evaluator, AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer, FilteredScorer
-from treebankanalytics.actions import Analyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer
+from treebankanalytics.actions import Analyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer, EdgeLengthBinsAnalyzer
 from treebankanalytics.formatters import CSVFormatter, LaTeXFormatter
 from treebankanalytics.supported_formats import format_factory_reader, format_factory_writer
 
 import os, re, sys
-import pkg_resources  # part of setuptools
-
-__version__ = pkg_resources.require("TreebankAnalytics")[0].version
+from treebankanalytics import __version__ as ta_version
+__version__ = ta_version
 
 def formatter_factory(f):
     if f == "latex":
@@ -48,7 +47,7 @@ def options():
     test_file_r = functools.partial(test_file, 'r')
     test_file_w = functools.partial(test_file, 'w')
 
-    parser = argparse.ArgumentParser(prog="TreebankAnalytics v. %s" % __version__)
+    parser = argparse.ArgumentParser(prog="TreebankAnalytics %s" % __version__)
     subs = parser.add_subparsers(dest='commands')
     subs.required = True
 
