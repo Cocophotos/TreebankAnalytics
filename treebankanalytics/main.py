@@ -1,8 +1,9 @@
 import yaml, argparse, functools
 
-from treebankanalytics.actions import Evaluator, AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer, FilteredScorer
-from treebankanalytics.actions import Analyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer, EdgeLengthBinsAnalyzer
-from treebankanalytics.formatters import CSVFormatter, LaTeXFormatter
+from treebankanalytics.actions import Analyzer, PropertyAnalyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer, EdgeLengthBinsAnalyzer, LexicalLabelPairsAnalyzer, LexicalPairsByLabelAnalyzer, SentenceLengthBinsAnalyzer, DependencyPathsAnalyzer
+from treebankanalytics.actions import AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer, Scorer, Evaluator, MergeNotDefinedError, FilteredScorer
+
+from treebankanalytics.formatters import *
 from treebankanalytics.supported_formats import format_factory_reader, format_factory_writer
 
 import os, re, sys
@@ -107,7 +108,6 @@ def main():
         config    = open_yaml_file(args.config)
         if config is None:
             sys.exit(-1)
-
         analyzers = [eval(k) for k in config['Analyzers']]
         reader    = format_factory_reader(args.format)
         formatter = formatter_factory(args.table)()
