@@ -150,13 +150,21 @@ class Graph(object):
             return False
 
     def targets_of(self, source):
-        if source in self._graph_source:
-            return self._graph_source[source]
+        src = source
+        if isinstance(source, Node):
+           src = source.index()
+
+        if src in self._graph_source:
+            return self._graph_source[src]
         raise AttributeError
 
     def sources_of(self, target):
-        if target in self._graph_target:
-            return self._graph_target[target]
+        tar = target
+        if isinstance(target, Node):
+            tar = target.index()
+
+        if tar in self._graph_target:
+            return self._graph_target[tar]
         raise AttributeError
 
     def edges_of(self, node):

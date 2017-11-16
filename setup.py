@@ -10,7 +10,7 @@ setup(
     author='Corentin Ribeyre',
     author_email='corentin.ribeyre@gmail.com',
     version=str(get_git_version()),
-    license= 'LGPL',
+    license= 'MIT',
     platforms=["any"],
     packages=find_packages(exclude = ['ez_setup',
         '*.tests', '*.tests.*', 'tests.*', 'tests']),

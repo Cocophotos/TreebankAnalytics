@@ -1,14 +1,14 @@
 import yaml, argparse, functools
 
-from treebankanalytics.actions import Evaluator, AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer, FilteredScorer
-from treebankanalytics.actions import Analyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer
-from treebankanalytics.formatters import CSVFormatter, LaTeXFormatter
+from treebankanalytics.actions import Analyzer, PropertyAnalyzer, VoidAnalyzer, CrossingEdgesAnalyzer, NonPlanarAnalyzer, CyclesAnalyzer, LabelsAnalyzer, EdgeLengthBinsAnalyzer, LexicalLabelPairsAnalyzer, LexicalPairsByLabelAnalyzer, SentenceLengthBinsAnalyzer, DependencyPathsAnalyzer
+from treebankanalytics.actions import AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer, Scorer, Evaluator, MergeNotDefinedError, FilteredScorer
+
+from treebankanalytics.formatters import *
 from treebankanalytics.supported_formats import format_factory_reader, format_factory_writer
 
 import os, re, sys
-import pkg_resources  # part of setuptools
-
-__version__ = pkg_resources.require("TreebankAnalytics")[0].version
+from treebankanalytics import __version__ as ta_version
+__version__ = ta_version
 
 def formatter_factory(f):
     if f == "latex":
@@ -48,7 +48,7 @@ def options():
     test_file_r = functools.partial(test_file, 'r')
     test_file_w = functools.partial(test_file, 'w')
 
-    parser = argparse.ArgumentParser(prog="TreebankAnalytics v. %s" % __version__)
+    parser = argparse.ArgumentParser(prog="TreebankAnalytics %s" % __version__)
     subs = parser.add_subparsers(dest='commands')
     subs.required = True
 
@@ -57,6 +57,7 @@ Supported formats are:
 - sdp (SemEval 2014 task 8 on Broad-coverage semantic dep. parsing)
 - sagae (dependency graph format where multi-heads are expressed by repeated tokens)
 - sequoia (dependency graph format where multi-heads are separated by a pipe)
+- tikz (dependency graph for LaTeX printing (writer only))
 If you're trying to transform from a CoNLL file to a SDP file,
 use sagae or sequoia as CoNLL because they are retro-compatible.
 
@@ -74,7 +75,7 @@ use sagae or sequoia as CoNLL because they are retro-compatible.
     evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sequoia'], help='Gold file format to be read')
 
     converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sagae', 'sequoia'], dest='ffrom')
-    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia'])
+    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia', 'tikz'])
     converter.add_argument('path', nargs='?', help='Absolute path to the file', metavar="FILE", type=test_file_r)
     return parser
 
@@ -108,7 +109,6 @@ def main():
         config    = open_yaml_file(args.config)
         if config is None:
             sys.exit(-1)
-
         analyzers = [eval(k) for k in config['Analyzers']]
         reader    = format_factory_reader(args.format)
         formatter = formatter_factory(args.table)()

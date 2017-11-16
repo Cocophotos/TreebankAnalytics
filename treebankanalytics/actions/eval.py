@@ -370,12 +370,16 @@ class EdgeLengthBinsScorer(Scorer):
             r['LF'] = compute_f1(r['LR'], r['LP'])
             r['UF'] = compute_f1(r['UR'], r['UP'])
             r['Gold'] = results[_bin]['LG']
+            #r['System'] = results[_bin]['LS']
+            #r['Common'] = results[_bin]['LC']
             results[_bin] = r
 
         table = [ ["Bin", 'NumberInGold', "LP", "LR", "LF", "UP", "UR", "UF"] ]
 
         for _bin, r in sorted(results.items(), key=sorting):
             row = ["%.2f" % (r[k]*100.0,) for k in ('LP', 'LR', 'LF', 'UP', 'UR', 'UF')]
+            #row.insert(0, str(r['Common']))
+            #row.insert(0, str(r['System']))
             row.insert(0, str(r['Gold']))
             row.insert(0, _bin)
             table.append(row)
