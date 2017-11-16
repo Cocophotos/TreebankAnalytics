@@ -57,6 +57,7 @@ Supported formats are:
 - sdp (SemEval 2014 task 8 on Broad-coverage semantic dep. parsing)
 - sagae (dependency graph format where multi-heads are expressed by repeated tokens)
 - sequoia (dependency graph format where multi-heads are separated by a pipe)
+- tikz (dependency graph for LaTeX printing (writer only))
 If you're trying to transform from a CoNLL file to a SDP file,
 use sagae or sequoia as CoNLL because they are retro-compatible.
 
@@ -74,7 +75,7 @@ use sagae or sequoia as CoNLL because they are retro-compatible.
     evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sequoia'], help='Gold file format to be read')
 
     converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sagae', 'sequoia'], dest='ffrom')
-    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia'])
+    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia', 'tikz'])
     converter.add_argument('path', nargs='?', help='Absolute path to the file', metavar="FILE", type=test_file_r)
     return parser
 
