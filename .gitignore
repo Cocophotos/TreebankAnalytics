@@ -9,3 +9,4 @@ __pycache__
 *.norm
 *.egg-info*
 docs/build
+dist/

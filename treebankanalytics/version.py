@@ -76,13 +76,15 @@ def get_git_version(abbrev=4):
 
     # First try to get the current version using “git describe”.
 
-    version = call_git_describe(abbrev).decode('utf-8')
+    version = call_git_describe(abbrev)
 
     # If that doesn't work, fall back on the value that's in
     # RELEASE-VERSION.
 
     if version is None:
         version = release_version
+    else:
+        version = version.decode('utf-8')
 
     # If we still don't have anything, that's an error.
 
