@@ -193,14 +193,16 @@ You can convert from one format to another, by specifying the input format and t
 
 If you're using the software, please cite the following work :
 
-Corentin Ribeyre, Méthodes d’Analyse Supervisée pour l’Interface Syntaxe-Sémantique, PhD Thesis, Université Paris 7 Diderot, 2015 (to appear).
+Corentin Ribeyre, Méthodes d’Analyse Supervisée pour l’Interface Syntaxe-Sémantique, PhD Thesis, Université Paris 7 Diderot, 2016.
 
 ```bib
-@phdthesis{ribeyre:2015:phd,
-title = {{Méthodes d'Analyse Supervisée pour l'Interface Syntaxe-Sémantique}},
-author = {Ribeyre, Corentin},
-school = {Universit{\'{e}} Paris 7 Diderot},
-year = {2015},
-note = {to appear}
+@phdthesis{ribeyre:tel-01323245,
+  title       = {{M{'e}thodes d'Analyse Supervis{'e}e pour l'Interface Syntaxe-S{'e}mantique}},
+  author      = {Ribeyre, Corentin},
+  url         = {https://hal.archives-ouvertes.fr/tel-01323245},
+  school      = {{Universit{'e} Paris Diderot}},
+  year        = {2016},
+  month       = Jan,
+  keywords    = {Deep syntax ; Syntax-semantic interface ; Graph Isomorphism Problem ; Transition-based parsing ; Graph parsing ; Interface syntaxe-s{'e}mantique ; Syntaxe profonde ; Analyse supervis{'e}e de graphes ; Analyse par transitions ; Isomorphisme de graphes},
 }
 ```

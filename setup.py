@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from setuptools import setup, find_packages
-from treebankanalytics.version import get_git_version
 import treebankanalytics
 
 setup(
@@ -9,7 +8,7 @@ setup(
     description='Column-Oriented Treebank Analytics (CoNLL-X like)',
     author='Corentin Ribeyre',
     author_email='corentin.ribeyre@gmail.com',
-    version=str(get_git_version()),
+    version="v1.1.2",
     license= 'MIT',
     platforms=["any"],
     packages=find_packages(exclude = ['ez_setup',
