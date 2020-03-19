@@ -41,14 +41,9 @@ def tikz_writer(graph, fileo):
                 if head == 0:
                     tikzheads.append("\t\\deproot{%i}{%s}" % (id, label))
                 else:
-                    tikzheads.append("\t\\depedge{%i}{%s}" % (head, label))
-                done = True
+                    tikzheads.append("\t\\depedge{%i}{%i}{%s}" % (head, n.index(), label))
         except AttributeError:
-            done = False
-
-        if not done:
-            tokens.append(token)
-            poss.append(pos)
+            pass
 
     print("\\begin{dependency}", file=fileo)
     print("\t\\begin{deptext}", file=fileo)

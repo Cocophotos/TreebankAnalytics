@@ -58,6 +58,8 @@ Supported formats are:
 - sagae (dependency graph format where multi-heads are expressed by repeated tokens)
 - sequoia (dependency graph format where multi-heads are separated by a pipe)
 - tikz (dependency graph for LaTeX printing (writer only))
+- linearize (Using List-based arc eager parsing to linearize the graph and outputting the sequence of actions)
+- penman (Using DFS to linearize the graph and outputing a bracketing format closed to the PENMAN notation of AMR)
 If you're trying to transform from a CoNLL file to a SDP file,
 use sagae or sequoia as CoNLL because they are retro-compatible.
 
@@ -72,10 +74,10 @@ use sagae or sequoia as CoNLL because they are retro-compatible.
         p.add_argument('-t', '--table', default='csv', choices=['csv', 'latex'], help='Table formatter')
 
     evaluate.add_argument('-s', '--system', required=True, help='System file', metavar="FILE", type=test_file_r)
-    evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sequoia'], help='Gold file format to be read')
+    evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sdp2015', 'sequoia'], help='Gold file format to be read')
 
-    converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sagae', 'sequoia'], dest='ffrom')
-    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia', 'tikz'])
+    converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sdp2015', 'sagae', 'sequoia'], dest='ffrom')
+    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sagae', 'sequoia', 'tikz', 'linearize', 'penman'])
     converter.add_argument('path', nargs='?', help='Absolute path to the file', metavar="FILE", type=test_file_r)
     return parser
 
