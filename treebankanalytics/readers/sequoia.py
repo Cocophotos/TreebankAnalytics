@@ -5,7 +5,7 @@ from treebankanalytics.readers import utils
 
 __all__ = ['sequoia_reader']
 
-def sequoia_reader(fileo):
+def sequoia_reader(fileo, lower = False):
     kept_id = None
     graph   = G.Graph()
     first   = True
@@ -39,6 +39,8 @@ def sequoia_reader(fileo):
             dep = items[0]
             if len(items) > 7:
                 for head, label in zip(items[6].split('|'), items[7].split('|')):
+                    if lower:
+                        label = label.lower()
                     edge = utils.create_edge(head, label, dep)
                     if edge is not None:
                         graph.add_edge(edge)

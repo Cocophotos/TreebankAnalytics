@@ -5,7 +5,7 @@ from treebankanalytics.readers import utils
 
 __all__ = ['common_sdp_reader']
 
-def common_sdp_reader(fileo, sdp_type = '2014'):
+def common_sdp_reader(fileo, sdp_type = '2014', lower = False):
     kept_id = None
     numsent = 1
     predicates = []
@@ -29,6 +29,8 @@ def common_sdp_reader(fileo, sdp_type = '2014'):
                     for predidx, label in enumerate(edges[out_node]):
                         if label == '_':
                             continue
+                        if lower:
+                            label = label.lower()
                         edge = utils.create_edge(predicates[predidx], label, out_node)
                         if edge is not None:
                             graph.add_edge(edge)
