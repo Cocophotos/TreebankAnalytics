@@ -6,7 +6,7 @@ from treebankanalytics.readers import utils
 
 __all__ = ['sagae_reader']
 
-def sagae_reader(fileo):
+def sagae_reader(fileo, lower = False):
     kept_id = None
     graph   = G.Graph()
     first   = True
@@ -40,6 +40,8 @@ def sagae_reader(fileo):
             if len(items) > 6:
                 head, label = items[6:8]
                 dep         = items[0]
+                if lower:
+                    label = label.lower()
                 edge = utils.create_edge(head, label, dep)
                 if edge is not None:
                     graph.add_edge(edge)

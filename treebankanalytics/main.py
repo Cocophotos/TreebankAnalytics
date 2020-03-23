@@ -58,6 +58,8 @@ Supported formats are:
 - sagae (dependency graph format where multi-heads are expressed by repeated tokens)
 - sequoia (dependency graph format where multi-heads are separated by a pipe)
 - tikz (dependency graph for LaTeX printing (writer only))
+- linearize (Using List-based arc eager parsing to linearize the graph and outputting the sequence of actions)
+- penman (Using DFS to linearize the graph and outputing a bracketing format closed to the PENMAN notation of AMR)
 If you're trying to transform from a CoNLL file to a SDP file,
 use sagae or sequoia as CoNLL because they are retro-compatible.
 
@@ -68,14 +70,15 @@ use sagae or sequoia as CoNLL because they are retro-compatible.
     for p in [evaluate, analyze]:
         p.add_argument('-c', '--config', required=True, help='Config file (YAML format)', metavar="FILE", type=test_file_r)
         p.add_argument('-g', '--gold', required=True, help='Gold (reference) file', metavar="FILE", type=test_file_r)
-        p.add_argument('-f', '--format', default='sequoia', choices=['sagae', 'sdp', 'sequoia'], help='File format to be read')
+        p.add_argument('-f', '--format', default='sequoia', choices=['sagae', 'sdp', 'sequoia', 'sdp2015'], help='File format to be read')
         p.add_argument('-t', '--table', default='csv', choices=['csv', 'latex'], help='Table formatter')
+        p.add_argument('-l', '--lower', default=False, action='store_true', help='Lower edge labels when evaluating or analyzing') 
 
     evaluate.add_argument('-s', '--system', required=True, help='System file', metavar="FILE", type=test_file_r)
-    evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sequoia'], help='Gold file format to be read')
+    evaluate.add_argument('-F', '--gold-format', default='sequoia', choices=['sagae', 'sdp', 'sdp2015', 'sequoia'], help='Gold file format to be read')
 
-    converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sagae', 'sequoia'], dest='ffrom')
-    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sdp', 'sagae', 'sequoia', 'tikz'])
+    converter.add_argument('-f', '--from', required=True, help='Convert from this format', choices=['sdp', 'sdp2015', 'sagae', 'sequoia', 'linearize', 'penman'], dest='ffrom')
+    converter.add_argument('-t', '--to', required=True, help='Convert to this format', choices=['sagae', 'sequoia', 'tikz', 'linearize', 'penman'])
     converter.add_argument('path', nargs='?', help='Absolute path to the file', metavar="FILE", type=test_file_r)
     return parser
 
@@ -101,7 +104,7 @@ def main():
         evaluator = Evaluator(formatter, config, scorers)#[AllScorer, SentenceBinsScorer, EdgeLengthBinsScorer, LabelsScorer])
 
         print_name = should_print_name(config, 'Scorers')
-        for n, t in evaluator.eval(golds=greader(args.gold), systems=reader(args.system)):
+        for n, t in evaluator.eval(golds=greader(args.gold, args.lower), systems=reader(args.system, args.lower)):
             if print_name:
                 print(n)
             print(t)

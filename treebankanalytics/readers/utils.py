@@ -23,6 +23,9 @@ def handle_extra_columns(node, columns):
 def is_comment(line):
     return line.startswith('#')
 
+def is_comment_with_id(line):
+    return is_comment(line) and line.startswith('#2')
+
 def create_node(id, token, lemma, cpos, pos, features):
     args = {
         'token': token,
