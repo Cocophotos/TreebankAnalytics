@@ -13,6 +13,7 @@ def normalize_dots(s: str) -> str:
 
 def penman_writer(graph: G.Graph, fileo):
     def dfs(u: G.Node, visited: Set[G.Node]):
+        add_labels = False 
         visited.add(u)
         children = []
         try: 
@@ -29,6 +30,10 @@ def penman_writer(graph: G.Graph, fileo):
         info.append(normalize_brackets("%s_%s" % (str(u.index()), u['pos'])))
         for e in children:
             _, label, tar_idx = utils.get_edge(e)
+
+            if not add_labels:
+                label = 'UNKNOWN'
+
             v = graph.node(tar_idx)
             if v not in visited:
                 info.append(":%s" % normalize_dots(label))

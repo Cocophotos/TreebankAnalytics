@@ -33,7 +33,7 @@ def parse(actions: List[str], nodes: List[G.Node], lower: bool) -> G.Graph:
             continue
         else:
             node_idx = int(c.split('_')[0])
-            if currParent is not None:
+            if currParent is not None and currLabel is not None:
                 try:
                     n = graph.node(node_idx)
                     e = utils.create_edge(currParent, currLabel, node_idx)
